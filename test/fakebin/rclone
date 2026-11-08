@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# `rclone listremotes` prints one "<name>:" per word of $FAKE_RCLONE_REMOTES.
+
+echo "$*" >>"$FAKE_ARGS"
+[[ $1 == listremotes ]] && for name in ${FAKE_RCLONE_REMOTES:-}; do echo "$name:"; done
+exit 0

@@ -1,0 +1,16 @@
+# What restic backup leaves out, one pattern per line. A pattern without a
+# slash matches that name anywhere; start with / to name one path.
+# https://restic.readthedocs.io/en/stable/040_backup.html#excluding-files
+#
+# Look before adding a plain name: "vendor", "tmp" or "log" would also drop
+# source code that lives in folders called like that.
+
+node_modules
+.gradle
+__pycache__
+.venv
+vendor/bundle
+tmp/cache
+log/*.log
+.cxx
+CMakeFiles

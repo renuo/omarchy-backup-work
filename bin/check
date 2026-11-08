@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+if command -v omarchy-plugin-validate >/dev/null 2>&1; then
+  omarchy-plugin-validate .
+fi
+
+shellcheck ctl.sh bin/* test/fakebin/*
+systemd-analyze verify --user --man=no systemd/restic-backup.service systemd/restic-backup.timer
+
+node --test \
+  --experimental-test-coverage \
+  --test-coverage-include='Model.js' \
+  --test-coverage-lines=100 \
+  test/*.test.js
+
+bats test/

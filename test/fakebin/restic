@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Records each call with the settings it got. `cat config` succeeds only when
+# $FAKE_RESTIC_EXISTS is set; every other command succeeds.
+
+echo "restic $* | $RESTIC_REPOSITORY | $RESTIC_PASSWORD_FILE | ${RESTIC_FORGET_ARGS:-}" >>"$FAKE_ARGS"
+[[ "$1 ${2:-}" == "cat config" ]] && [[ -z ${FAKE_RESTIC_EXISTS:-} ]] && exit 1
+exit 0

@@ -1,0 +1,24 @@
+[Unit]
+Description=restic backup
+Documentation=https://restic.readthedocs.io/en/stable/040_backup.html
+ConditionPathExists=%E/restic/backup.env
+# A laptop often wakes without network: retry a few times, then wait for the
+# next timer run.
+StartLimitIntervalSec=3h
+StartLimitBurst=4
+
+[Service]
+Type=oneshot
+StateDirectory=restic-backup
+Environment=RESTIC_PASSWORD_FILE=%E/restic/password
+EnvironmentFile=%E/restic/backup.env
+# $VAR splits on spaces, ${VAR} would not.
+ExecStart=/usr/bin/restic backup $RESTIC_BACKUP_PATHS --exclude-file=%E/restic/excludes.txt $RESTIC_BACKUP_ARGS
+ExecStartPost=/usr/bin/restic forget --prune $RESTIC_FORGET_ARGS
+# systemd forgets a run when the user manager restarts, so the outcome is kept
+# for the panel. $$ hands a variable to the shell instead of to systemd.
+ExecStopPost=/bin/sh -c 'echo "$$SERVICE_RESULT $$(date +%%s)" >"$$STATE_DIRECTORY/last-run"; [ "$$SERVICE_RESULT" != success ] || { cp "$$STATE_DIRECTORY/last-run" "$$STATE_DIRECTORY/last-success"; printf %%s "$$RESTIC_REPOSITORY" >"$$STATE_DIRECTORY/repository"; }'
+Restart=on-failure
+RestartSec=15min
+Nice=10
+IOSchedulingClass=idle

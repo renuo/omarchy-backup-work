@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Records the call.
+
+echo "omarchy-launch-config-editor $*" >>"$FAKE_ARGS"
+

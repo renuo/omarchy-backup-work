@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Records the call and what it was given.
+
+echo "wl-copy $*" >>"$FAKE_ARGS"
+cat >"$FAKE_CLIPBOARD"
