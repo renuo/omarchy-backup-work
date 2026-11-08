@@ -1,6 +1,6 @@
 [Unit]
-Description=restic backup
-Documentation=https://restic.readthedocs.io/en/stable/040_backup.html
+Description=Back up the work folders to Google Drive
+Documentation=https://github.com/renuo/omarchy-backup-work
 ConditionPathExists=%E/backup-work/backup.env
 # A laptop often wakes without network: retry a few times, then wait for the
 # next timer run.

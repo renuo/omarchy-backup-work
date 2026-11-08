@@ -7,7 +7,8 @@ import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 
-// Bar button plus popup. The button says whether backups still happen. The
+// Bar button plus popup for the work level of the backup: your own folders
+// to Google Drive every hour. The button says whether backups still happen. The
 // popup walks through the setup one step at a time and then offers the
 // backups themselves. The settings are restic's own environment variables in
 // ~/.config/backup-work/backup.env, which systemd hands to backup-work.service;

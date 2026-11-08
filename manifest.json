@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "id": "renuo.backup-work",
-  "name": "restic",
+  "name": "Work backup",
   "version": "1.0.0",
   "author": "Renuo AG",
   "license": "MIT",
-  "description": "Encrypted restic backups on a schedule, set up and watched from the Omarchy bar.",
+  "description": "The work level of a Renuo laptop's backup: Work, Documents and Pictures, encrypted with restic to your Renuo Google Drive every hour.",
   "kinds": [
     "bar-widget"
   ],
@@ -13,7 +13,7 @@
     "barWidget": "Panel.qml"
   },
   "barWidget": {
-    "displayName": "Backup",
+    "displayName": "Work backup",
     "description": "When restic last backed up, whether it is running or failed, and every setup step.",
     "category": "Files",
     "allowMultiple": false,

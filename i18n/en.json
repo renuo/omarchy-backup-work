@@ -1,5 +1,5 @@
 {
-  "title": "Backup",
+  "title": "Work",
   "phase.loading": "Loading…",
   "phase.missing": "restic is not installed",
   "phase.running": "Backing up…",
