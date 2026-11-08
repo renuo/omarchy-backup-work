@@ -209,7 +209,7 @@ describe("heroMeta", () => {
 
 describe("tooltip", () => {
   it("adds why the widget is dimmed or urgent", () => {
-    assert.equal(Model.tooltip(healthy({ timerEnabled: false }), NOW, strings), "Last backup 1 hour ago\nScheduled backups are off")
+    assert.equal(Model.tooltip(healthy({ timerEnabled: false }), NOW, strings), "Last backup 1 hour ago\nHourly backups are off")
     assert.equal(Model.tooltip(healthy({ lastSuccess: NOW - 4 * DAY }), NOW, strings), "Last backup 4 days ago\nNo successful backup for days")
   })
 

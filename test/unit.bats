@@ -34,3 +34,26 @@ stop_post() {
   [ ! -f "$STATE_DIRECTORY/repository" ]
 }
 
+
+# Runs the daily prune the way systemd would, with restic faked.
+prune() {
+  local script
+  script=$(sed -n "s/^ExecStartPost=\/bin\/sh -c '\(.*\)'$/\1/p" "$UNIT" | sed 's/\$\$/$/g; s/%%/%/g')
+  [ -n "$script" ]
+  FAKE_ARGS="$BATS_TEST_TMPDIR/args" PATH="$BATS_TEST_DIRNAME/fakebin:$PATH" sh -c "$script"
+}
+
+@test "prunes after the first backup" {
+  prune
+  grep -q '^restic prune ' "$BATS_TEST_TMPDIR/args"
+  [ -f "$STATE_DIRECTORY/last-prune" ]
+}
+
+@test "prunes at most once a day" {
+  touch "$STATE_DIRECTORY/last-prune"
+  prune
+  [ ! -e "$BATS_TEST_TMPDIR/args" ]
+  touch -d '25 hours ago' "$STATE_DIRECTORY/last-prune"
+  prune
+  grep -q '^restic prune ' "$BATS_TEST_TMPDIR/args"
+}

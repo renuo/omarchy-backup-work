@@ -1,9 +1,9 @@
 [Unit]
-Description=Scheduled restic backup
+Description=Back up the work folders every hour
 
 [Timer]
-OnCalendar=daily
-RandomizedDelaySec=1h
+OnCalendar=hourly
+RandomizedDelaySec=10min
 Persistent=true
 
 [Install]

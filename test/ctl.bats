@@ -93,7 +93,7 @@ state_field() {
 @test "edit config starts from the template with this home filled in" {
   run bash "$SCRIPT" edit config
   [ "$status" -eq 0 ]
-  grep -qx "RESTIC_BACKUP_PATHS=$HOME/Work" "$CONFIG"
+  grep -qx "RESTIC_BACKUP_PATHS=$HOME/Work $HOME/Documents $HOME/Pictures" "$CONFIG"
   grep -qx 'RESTIC_REPOSITORY=rclone:gdrive:Backups/work' "$CONFIG"
   grep -qx "omarchy-launch-config-editor $CONFIG" "$FAKE_ARGS"
 }

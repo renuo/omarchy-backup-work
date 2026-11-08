@@ -14,7 +14,9 @@ Environment=RESTIC_PASSWORD_FILE=%E/backup-work/password
 EnvironmentFile=%E/backup-work/backup.env
 # $VAR splits on spaces, ${VAR} would not.
 ExecStart=/usr/bin/restic backup $RESTIC_BACKUP_PATHS --exclude-file=%E/backup-work/excludes.txt $RESTIC_BACKUP_ARGS
-ExecStartPost=/usr/bin/restic forget --prune $RESTIC_FORGET_ARGS
+ExecStartPost=/usr/bin/restic forget $RESTIC_FORGET_ARGS
+# Pruning rewrites packs on Google Drive; once a day is plenty.
+ExecStartPost=/bin/sh -c '[ -n "$$(find "$$STATE_DIRECTORY/last-prune" -mmin -1440 2>/dev/null)" ] || { restic prune && touch "$$STATE_DIRECTORY/last-prune"; }'
 # systemd forgets a run when the user manager restarts, so the outcome is kept
 # for the panel. $$ hands a variable to the shell instead of to systemd.
 ExecStopPost=/bin/sh -c 'echo "$$SERVICE_RESULT $$(date +%%s)" >"$$STATE_DIRECTORY/last-run"; [ "$$SERVICE_RESULT" != success ] || { cp "$$STATE_DIRECTORY/last-run" "$$STATE_DIRECTORY/last-success"; printf %%s "$$RESTIC_REPOSITORY" >"$$STATE_DIRECTORY/repository"; }'
