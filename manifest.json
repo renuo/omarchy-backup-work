@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "renuo.restic",
+  "name": "restic",
+  "version": "1.0.0",
+  "author": "Renuo AG",
+  "license": "MIT",
+  "description": "Encrypted restic backups on a schedule, set up and watched from the Omarchy bar.",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Panel.qml"
+  },
+  "barWidget": {
+    "displayName": "Backup",
+    "description": "When restic last backed up, whether it is running or failed, and every setup step.",
+    "category": "Files",
+    "allowMultiple": false,
+    "defaultSection": "right"
+  }
+}
