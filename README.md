@@ -4,12 +4,12 @@ The **work** level of a Renuo laptop's backup: your own folders, `~/Work`, `~/Do
 
 ## Three levels
 
-Each level has its own plugin, its own place and its own pace. Renuo keeps things on the office NAS and in Google Drive.
+Each level has its own place and its own pace. Renuo keeps the machine and the work on the office NAS and in Google Drive, each with a plugin; the config is your own dotfiles repository.
 
 | Level | Plugin | Keeps | Where | When | Brings back |
 |---|---|---|---|---|---|
 | **Machine** | [renuo.backup-machine](https://github.com/renuo/omarchy-backup-machine) | The whole system: `/` and `/home` | Office NAS | Once a day at the office | This laptop as it was, after a broken disk or a bad update |
-| **Config** | [renuo.backup-dotfiles](https://github.com/renuo/omarchy-backup-dotfiles) | The dotfiles chezmoi manages: Omarchy tweaks, shell, editor, packages | Your dotfiles repository | Every hour | Your setup, on a new laptop |
+| **Config** | none: the dotfiles are yours | The dotfiles chezmoi manages: Omarchy tweaks, shell, editor, packages | Your dotfiles repository | When you commit and push | Your setup, on a new laptop |
 | **Work** | [renuo.backup-work](https://github.com/renuo/omarchy-backup-work) (this one) | `~/Work`, `~/Documents`, `~/Pictures` | Your Renuo Google Drive | Every hour | Your files, on any laptop |
 
 What lives in Google Drive already, like documents shared with colleagues, needs none of them.
