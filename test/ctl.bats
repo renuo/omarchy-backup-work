@@ -7,9 +7,9 @@ setup() {
   export FAKE_ARGS="$BATS_TEST_TMPDIR/args"
   export FAKE_SYSTEMD="$BATS_TEST_TMPDIR/systemd"
   export FAKE_CLIPBOARD="$BATS_TEST_TMPDIR/clipboard"
-  CONFIG="$XDG_CONFIG_HOME/restic/backup.env"
-  PASSWORD="$XDG_CONFIG_HOME/restic/password"
-  STATE="$XDG_STATE_HOME/restic-backup"
+  CONFIG="$XDG_CONFIG_HOME/backup-work/backup.env"
+  PASSWORD="$XDG_CONFIG_HOME/backup-work/password"
+  STATE="$XDG_STATE_HOME/backup-work"
   mkdir -p "$HOME" "$FAKE_SYSTEMD"
   : >"$FAKE_ARGS"
 }
@@ -78,9 +78,9 @@ state_field() {
 }
 
 @test "state asks systemd about the timer and the running backup" {
-  echo enabled >"$FAKE_SYSTEMD/restic-backup.timer.enabled"
-  echo activating >"$FAKE_SYSTEMD/restic-backup.service.active"
-  echo '[{"next":1762650000123456,"unit":"restic-backup.timer"}]' >"$FAKE_SYSTEMD/timers.json"
+  echo enabled >"$FAKE_SYSTEMD/backup-work.timer.enabled"
+  echo activating >"$FAKE_SYSTEMD/backup-work.service.active"
+  echo '[{"next":1762650000123456,"unit":"backup-work.timer"}]' >"$FAKE_SYSTEMD/timers.json"
   run bash "$SCRIPT" state
   [ "$(jq -c '[.timerEnabled, .running, .nextRun]' <<<"$output")" = '[true,true,1762650000]' ]
 }
@@ -106,7 +106,7 @@ state_field() {
 
 @test "edit excludes starts from the template" {
   run bash "$SCRIPT" edit excludes
-  cmp "$XDG_CONFIG_HOME/restic/excludes.txt" "$BATS_TEST_DIRNAME/../templates/excludes.txt"
+  cmp "$XDG_CONFIG_HOME/backup-work/excludes.txt" "$BATS_TEST_DIRNAME/../templates/excludes.txt"
 }
 
 @test "password creates a long random one only the owner can read" {
@@ -142,28 +142,28 @@ state_field() {
 @test "timer on enables and starts the timer quietly" {
   run bash "$SCRIPT" timer on
   [ "$output" = "" ]
-  grep -qx 'systemctl --user enable --now restic-backup.timer' "$FAKE_ARGS"
+  grep -qx 'systemctl --user enable --now backup-work.timer' "$FAKE_ARGS"
 }
 
 @test "timer off disables and stops it" {
   run bash "$SCRIPT" timer off
-  grep -qx 'systemctl --user disable --now restic-backup.timer' "$FAKE_ARGS"
+  grep -qx 'systemctl --user disable --now backup-work.timer' "$FAKE_ARGS"
 }
 
 @test "timer prints systemd's complaint when it fails" {
-  FAKE_SYSTEMCTL_FAIL="Unit restic-backup.timer does not exist." run bash "$SCRIPT" timer on
-  [ "$output" = "Unit restic-backup.timer does not exist." ]
+  FAKE_SYSTEMCTL_FAIL="Unit backup-work.timer does not exist." run bash "$SCRIPT" timer on
+  [ "$output" = "Unit backup-work.timer does not exist." ]
 }
 
 @test "backup starts the service without waiting for it" {
   run bash "$SCRIPT" backup
   [ "$output" = "" ]
-  grep -qx 'systemctl --user start --no-block restic-backup.service' "$FAKE_ARGS"
+  grep -qx 'systemctl --user start --no-block backup-work.service' "$FAKE_ARGS"
 }
 
 @test "stop stops a running backup" {
   run bash "$SCRIPT" stop
-  grep -qx 'systemctl --user stop restic-backup.service' "$FAKE_ARGS"
+  grep -qx 'systemctl --user stop backup-work.service' "$FAKE_ARGS"
 }
 
 @test "init creates a repository that does not exist and remembers it" {
@@ -208,14 +208,14 @@ state_field() {
 }
 
 @test "schedule edits a drop-in from the template and restarts an enabled timer" {
-  echo enabled >"$FAKE_SYSTEMD/restic-backup.timer.enabled"
+  echo enabled >"$FAKE_SYSTEMD/backup-work.timer.enabled"
   run bash "$SCRIPT" schedule
   [ "$status" -eq 0 ]
-  local file="$XDG_CONFIG_HOME/systemd/user/restic-backup.timer.d/schedule.conf"
+  local file="$XDG_CONFIG_HOME/systemd/user/backup-work.timer.d/schedule.conf"
   cmp "$file" "$BATS_TEST_DIRNAME/../templates/schedule.conf"
   grep -qx "omarchy-launch-editor --inline $file" "$FAKE_ARGS"
   grep -qx 'systemctl --user daemon-reload' "$FAKE_ARGS"
-  grep -qx 'systemctl --user restart restic-backup.timer' "$FAKE_ARGS"
+  grep -qx 'systemctl --user restart backup-work.timer' "$FAKE_ARGS"
 }
 
 @test "schedule leaves a disabled timer off" {

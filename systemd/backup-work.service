@@ -1,7 +1,7 @@
 [Unit]
 Description=restic backup
 Documentation=https://restic.readthedocs.io/en/stable/040_backup.html
-ConditionPathExists=%E/restic/backup.env
+ConditionPathExists=%E/backup-work/backup.env
 # A laptop often wakes without network: retry a few times, then wait for the
 # next timer run.
 StartLimitIntervalSec=3h
@@ -9,11 +9,11 @@ StartLimitBurst=4
 
 [Service]
 Type=oneshot
-StateDirectory=restic-backup
-Environment=RESTIC_PASSWORD_FILE=%E/restic/password
-EnvironmentFile=%E/restic/backup.env
+StateDirectory=backup-work
+Environment=RESTIC_PASSWORD_FILE=%E/backup-work/password
+EnvironmentFile=%E/backup-work/backup.env
 # $VAR splits on spaces, ${VAR} would not.
-ExecStart=/usr/bin/restic backup $RESTIC_BACKUP_PATHS --exclude-file=%E/restic/excludes.txt $RESTIC_BACKUP_ARGS
+ExecStart=/usr/bin/restic backup $RESTIC_BACKUP_PATHS --exclude-file=%E/backup-work/excludes.txt $RESTIC_BACKUP_ARGS
 ExecStartPost=/usr/bin/restic forget --prune $RESTIC_FORGET_ARGS
 # systemd forgets a run when the user manager restarts, so the outcome is kept
 # for the panel. $$ hands a variable to the shell instead of to systemd.

@@ -8,14 +8,14 @@
 set -euo pipefail
 
 TEMPLATE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/templates"
-CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/restic"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/backup-work"
 CONFIG="$CONFIG_DIR/backup.env"
 EXCLUDES="$CONFIG_DIR/excludes.txt"
 PASSWORD="$CONFIG_DIR/password"
 UNIT_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
-STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/restic-backup"
-SERVICE=restic-backup.service
-TIMER=restic-backup.timer
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/backup-work"
+SERVICE=backup-work.service
+TIMER=backup-work.timer
 
 usage() {
   echo "usage: ctl.sh state | edit config|excludes | password | copy-password | timer on|off | backup | stop | init | schedule | log | snapshots | browse | shell" >&2
@@ -35,7 +35,7 @@ setting() {
   printf '%s' "$value"
 }
 
-# The same environment restic-backup.service gets, for restic run by hand.
+# The same environment backup-work.service gets, for restic run by hand.
 load_settings() {
   local line key
   [[ -f $CONFIG ]] || {
@@ -183,7 +183,7 @@ schedule() {
 }
 
 browse() {
-  local dir="${XDG_RUNTIME_DIR:?}/restic-browse"
+  local dir="${XDG_RUNTIME_DIR:?}/backup-work-browse"
   load_settings
   mkdir -p "$dir"
   echo "Backups are at $dir/snapshots while this runs. Copy out what you need, then press Ctrl+C."

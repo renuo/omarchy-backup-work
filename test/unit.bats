@@ -1,5 +1,5 @@
 setup() {
-  UNIT="$BATS_TEST_DIRNAME/../systemd/restic-backup.service"
+  UNIT="$BATS_TEST_DIRNAME/../systemd/backup-work.service"
   export STATE_DIRECTORY="$BATS_TEST_TMPDIR/state"
   export RESTIC_REPOSITORY="rclone:gdrive:Backups/work"
   mkdir -p "$STATE_DIRECTORY"

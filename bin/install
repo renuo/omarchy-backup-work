@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Installs restic, the restic-backup service and timer and this plugin, then
+# Installs restic, the backup-work service and timer and this plugin, then
 # enables the plugin. The setup itself happens in its panel, see README.md.
 #
 # A copy rather than a symlink on purpose: the shell watches the plugin
@@ -10,7 +10,7 @@
 
 set -euo pipefail
 
-PLUGIN_ID="renuo.restic"
+PLUGIN_ID="renuo.backup-work"
 SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TARGET_DIR="$HOME/.config/omarchy/plugins/$PLUGIN_ID"
 UNIT_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/systemd/user"
@@ -28,9 +28,9 @@ omarchy-plugin-validate "$SOURCE_DIR" || fail "manifest validation failed"
 command -v restic >/dev/null 2>&1 || omarchy pkg add restic
 
 mkdir -p "$UNIT_DIR"
-cp "$SOURCE_DIR/systemd/restic-backup.service" "$SOURCE_DIR/systemd/restic-backup.timer" "$UNIT_DIR/"
+cp "$SOURCE_DIR/systemd/backup-work.service" "$SOURCE_DIR/systemd/backup-work.timer" "$UNIT_DIR/"
 systemctl --user daemon-reload
-echo "installed restic-backup.service and .timer -> $UNIT_DIR"
+echo "installed backup-work.service and .timer -> $UNIT_DIR"
 
 mkdir -p "$TARGET_DIR"
 

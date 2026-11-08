@@ -10,14 +10,14 @@ import "Model.js" as Model
 // Bar button plus popup. The button says whether backups still happen. The
 // popup walks through the setup one step at a time and then offers the
 // backups themselves. The settings are restic's own environment variables in
-// ~/.config/restic/backup.env, which systemd hands to restic-backup.service;
+// ~/.config/backup-work/backup.env, which systemd hands to backup-work.service;
 // the popup opens that file in the editor instead of copying it into
 // controls. Everything that talks to a person runs in Omarchy's floating
 // terminal through ctl.sh, and the popup steps aside for it.
 Panel {
   id: root
-  moduleName: "renuo.restic"
-  ipcTarget: "restic"
+  moduleName: "renuo.backup-work"
+  ipcTarget: "backup-work"
 
   readonly property string ctlPath: Model.pathFromUrl(Qt.resolvedUrl("ctl.sh"))
 

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "renuo.restic",
+  "id": "renuo.backup-work",
   "name": "restic",
   "version": "1.0.0",
   "author": "Renuo AG",
